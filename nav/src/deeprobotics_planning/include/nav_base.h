@@ -11,7 +11,8 @@
 #ifndef NAV_BASE_H_
 #define NAV_BASE_H_
 
-#include"common.h"
+#include "common.h"
+#include "basic_function.h"
 #include <std_msgs/Float32.h>
 #include <std_msgs/Float64.h>
 #include <std_msgs/Int32.h>
@@ -29,7 +30,7 @@
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <nav_msgs/Odometry.h>
 
-namespace base{
+namespace nav{
     class NavigationBase
     {
     private:

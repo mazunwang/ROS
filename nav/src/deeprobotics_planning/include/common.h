@@ -36,6 +36,7 @@ enum PlanState{
 };
 
 typedef Eigen::Vector3d Vec3;
+typedef Eigen::Vector4d Vec4;
 typedef Eigen::Matrix3d Mat3;
 
 #endif

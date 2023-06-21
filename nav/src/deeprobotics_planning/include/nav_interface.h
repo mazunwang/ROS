@@ -14,16 +14,27 @@
 
 
 #include "common.h"
+#include <actionlib/server/simple_action_server.h>
 #include "nav/NavigationAction.h"
+#include "nav_base.h"
+#include "nav_sl.h"
 
 namespace interface{
-    class NavgationInterface
-    {
+    typedef actionlib::SimpleActionServer<nav::NavigationAction> NavigationActionServer;
+
+    class NavgationInterface{
     private:
-        /* data */
+        NavigationActionServer* as_;
+        std::shared_ptr<nav::NavigationBase> nav_ptr_;
+        ros::Subscriber odom_sub_;
+
     public:
         NavgationInterface();
         ~NavgationInterface();
+
+        void NavigationStraightLineCb(const nav::NavigationGoalConstPtr& goal);
+
+        void OdometryCallback(nav_msgs::OdometryConstPtr msg);
     };
     
 

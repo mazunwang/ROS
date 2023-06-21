@@ -1,11 +1,12 @@
 cmake_minimum_required(VERSION 3.8.0)
-project(nav)
+project(deeprobotics_planning)
 
 set(CMAKE_CXX_FLAGS "-std=c++11 -g -w -s")
 set(CMAKE_BUILD_TYPE Release)
 set(THIRD_PARTY ./third_party)
 ## Find catkin macros and libraries
 find_package(catkin REQUIRED COMPONENTS
+
     roscpp
     rospy
     geometry_msgs
@@ -14,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
     std_msgs
     tf
     message_generation
+    actionlib
     #deep_msgs
 )
 
@@ -79,7 +81,10 @@ include_directories(
 
 
 
-add_library(nav_interface STATIC src/nav_interface.cpp src/nav_sl.cpp)
+add_library(nav_interface STATIC  src/basic_function.cpp src/nav_interface.cpp src/nav_sl.cpp )
 
-add_executable(nav_test src/test.cpp)
-target_link_libraries(nav_test nav_interface)
+# add_executable(nav_test src/test.cpp )
+# target_link_libraries(nav_test nav_interface ${catkin_LIBRARIES})
+
+add_executable(navigation src/nav_node.cpp)
+target_link_libraries(navigation nav_interface ${catkin_LIBRARIES})

@@ -1,0 +1,18 @@
+<launch>
+
+    <node name="nav_node" pkg="deeprobotics_planning" type="navigation" output="screen" >
+        <!-- <param name="port_num" value="43897" />
+        <param name="add_tail" value="false"/> -->
+    </node>
+    <!-- <node name="sender" pkg="message_transformer_cpp" type="sender" output="screen" >
+        <param name="motion_port" value="43893"/>
+        <param name="motion_ip" value="192.168.1.103"/>
+        <param name="perception_port" value="43897"/>
+        <param name="perception_ip" value="192.168.1.105"/>
+        <param name="eth_inf" value="ethbus"/>
+        <param name="navigation_port" value="43897"/>
+        <param name="navigation_ip" value="192.168.1.106"/>
+        
+    </node> -->
+
+</launch>

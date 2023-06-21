@@ -14,8 +14,8 @@
 
 #include "nav_base.h"
 
-namespace sl{
-    class NavigationStraightLine : public base::NavigationBase
+namespace nav{
+    class NavigationStraightLine : public NavigationBase
     {
     private:
         PlanState plan_state_;

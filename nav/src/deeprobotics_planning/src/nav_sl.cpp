@@ -11,7 +11,7 @@
 
 #include "nav_sl.h"
 
-using namespace sl;
+using namespace nav;
 
 NavigationStraightLine::NavigationStraightLine(const std::string& name):NavigationBase(name){
     inital_pose_flag_ = false;
