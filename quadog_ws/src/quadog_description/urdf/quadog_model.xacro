@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<robot name="quadog" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+ <xacro:include filename="$(find quadog_description)/urdf/quadog_body_model.xacro" />
+ <!--<xacro:include filename="$(find quadog_description)/urdf/quadog_sensor_model.xacro" />-->
+
+
+
+</robot>

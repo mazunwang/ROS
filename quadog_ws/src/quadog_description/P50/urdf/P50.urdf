@@ -1,0 +1,701 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot
+  name="P50">
+  <link
+    name="base">
+    <inertial>
+      <origin
+        xyz="-0.0049424 -5.6099E-05 0.0021137"
+        rpy="0 0 0" />
+      <mass
+        value="30.6" />
+      <inertia
+        ixx="0.20455"
+        ixy="-0.00013472"
+        ixz="0.00026524"
+        iyy="0.3221"
+        iyz="3.4664E-05"
+        izz="0.42842" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/mzw/worknote/quadog_ws/src/quadog_description/P50/meshes/base.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.003"/>
+      <geometry>
+        <box size="0.39 0.310 0.166"/>
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="fl_hip">
+    <inertial>
+      <origin
+        xyz="-0.0030414 -0.02616 -0.00010748"
+        rpy="0 0 0" />
+      <mass
+        value="1.4" />
+      <inertia
+        ixx="0.0020486"
+        ixy="4.5844E-05"
+        ixz="-5.1483E-06"
+        iyy="0.0025034"
+        iyz="-1.4272E-05"
+        izz="0.0023869" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/mzw/worknote/quadog_ws/src/quadog_description/P50/meshes/fl_hip.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+  </link>
+  <joint
+    name="fl_hipx"
+    type="revolute">
+    <origin
+      xyz="0.3265 0.095 0"
+      rpy="0 0 0" />
+    <parent
+      link="base" />
+    <child
+      link="fl_hip" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="-0.2793"
+      upper="0.5585"
+      effort="230"
+      velocity="17.453" />
+  </joint>
+  <link
+    name="fl_thigh">
+    <inertial>
+      <origin
+        xyz="-0.005262 -0.020047 -0.067876"
+        rpy="0 0 0" />
+      <mass
+        value="4.5" />
+      <inertia
+        ixx="0.032957"
+        ixy="2.3972E-06"
+        ixz="-0.0016039"
+        iyy="0.036837"
+        iyz="0.00051616"
+        izz="0.0056745" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/mzw/worknote/quadog_ws/src/quadog_description/P50/meshes/fl_thigh.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="1.5708 0 0" xyz="0 -0.050 0"/>
+      <geometry>
+        <cylinder length="0.15" radius="0.053"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="fl_hipy"
+    type="revolute">
+    <origin
+      xyz="0 0.151 0"
+      rpy="0 0 0" />
+    <parent
+      link="fl_hip" />
+    <child
+      link="fl_thigh" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="-2.7822"
+      upper="0.3454"
+      effort="230"
+      velocity="17.453" />
+  </joint>
+  <link
+    name="fl_shank">
+    <inertial>
+      <origin
+        xyz="0.0023768 -1.1061E-06 -0.20867"
+        rpy="0 0 0" />
+      <mass
+        value="0.31429" />
+      <inertia
+        ixx="0.0035319"
+        ixy="5.8741E-09"
+        ixz="0.00020364"
+        iyy="0.0036205"
+        iyz="-6.2729E-07"
+        izz="0.00015099" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/mzw/worknote/quadog_ws/src/quadog_description/P50/meshes/fl_shank.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 -0.175"/>
+      <geometry>
+        <cylinder length="0.35" radius="0.03"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0 0 -0.35" rpy="1.5708 0 0" />
+      <geometry>
+        <cylinder length="0.04" radius="0.035"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="fl_knee"
+    type="revolute">
+    <origin
+      xyz="0 0 -0.35"
+      rpy="0 0 0" />
+    <parent
+      link="fl_thigh" />
+    <child
+      link="fl_shank" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="0.6016"
+      upper="2.8135"
+      effort="365"
+      velocity="18.069" />
+  </joint>
+  <link
+    name="fr_hip">
+    <inertial>
+      <origin
+        xyz="-0.0030414 0.02616 0.00010748"
+        rpy="0 0 0" />
+      <mass
+        value="1.4" />
+      <inertia
+        ixx="0.0020486"
+        ixy="-4.5844E-05"
+        ixz="5.1483E-06"
+        iyy="0.0025034"
+        iyz="-1.4272E-05"
+        izz="0.0023869" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/mzw/worknote/quadog_ws/src/quadog_description/P50/meshes/fr_hip.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+  </link>
+  <joint
+    name="fr_hipx"
+    type="revolute">
+    <origin
+      xyz="0.3265 -0.095 0"
+      rpy="0 0 0" />
+    <parent
+      link="base" />
+    <child
+      link="fr_hip" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="-0.5585"
+      upper="0.2793"
+      effort="230"
+      velocity="17.453" />
+  </joint>
+  <link
+    name="fr_thigh">
+    <inertial>
+      <origin
+        xyz="-0.0052619 0.020047 -0.067876"
+        rpy="0 0 0" />
+      <mass
+        value="4.5" />
+      <inertia
+        ixx="0.032957"
+        ixy="-2.401E-06"
+        ixz="-0.0016039"
+        iyy="0.036837"
+        iyz="-0.00051615"
+        izz="0.0056745" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/mzw/worknote/quadog_ws/src/quadog_description/P50/meshes/fr_thigh.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="1.5708 0 0" xyz="0 0.050 0"/>
+      <geometry>
+        <cylinder length="0.15" radius="0.053"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="fr_hipy"
+    type="revolute">
+    <origin
+      xyz="0 -0.151 0"
+      rpy="0 0 0" />
+    <parent
+      link="fr_hip" />
+    <child
+      link="fr_thigh" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="-2.7822"
+      upper="0.3454"
+      effort="230"
+      velocity="17.453" />
+  </joint>
+  <link
+    name="fr_shank">
+    <inertial>
+      <origin
+        xyz="0.0023767 -1.1239E-06 -0.20868"
+        rpy="0 0 0" />
+      <mass
+        value="0.31429" />
+      <inertia
+        ixx="0.0035319"
+        ixy="5.6505E-09"
+        ixz="0.00020364"
+        iyy="0.0036205"
+        iyz="-6.2734E-07"
+        izz="0.00015099" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/mzw/worknote/quadog_ws/src/quadog_description/P50/meshes/fr_shank.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 -0.175"/>
+      <geometry>
+        <cylinder length="0.35" radius="0.03"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0 0 -0.35" rpy="1.5708 0 0" />
+      <geometry>
+        <cylinder length="0.04" radius="0.035"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="fr_knee"
+    type="revolute">
+    <origin
+      xyz="0 0 -0.35"
+      rpy="0 0 0" />
+    <parent
+      link="fr_thigh" />
+    <child
+      link="fr_shank" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="0.6016"
+      upper="2.8135"
+      effort="365"
+      velocity="18.069" />
+  </joint>
+  <link
+    name="hl_hip">
+    <inertial>
+      <origin
+        xyz="0.0030414 -0.02616 0.00010748"
+        rpy="0 0 0" />
+      <mass
+        value="1.4" />
+      <inertia
+        ixx="0.0020486"
+        ixy="-4.5844E-05"
+        ixz="-5.1483E-06"
+        iyy="0.0025034"
+        iyz="1.4272E-05"
+        izz="0.0023869" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/mzw/worknote/quadog_ws/src/quadog_description/P50/meshes/hl_hip.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+  </link>
+  <joint
+    name="hl_hipx"
+    type="revolute">
+    <origin
+      xyz="-0.3265 0.095 0"
+      rpy="0 0 0" />
+    <parent
+      link="base" />
+    <child
+      link="hl_hip" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="-0.2793"
+      upper="0.5585"
+      effort="230"
+      velocity="17.453" />
+  </joint>
+  <link
+    name="hl_thigh">
+    <inertial>
+      <origin
+        xyz="-0.005168 -0.020085 -0.067991"
+        rpy="0 0 0" />
+        <mass
+        value="4.5" />
+      <inertia
+        ixx="0.032957"
+        ixy="-2.401E-06"
+        ixz="-0.0016039"
+        iyy="0.036837"
+        iyz="-0.00051615"
+        izz="0.0056745" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/mzw/worknote/quadog_ws/src/quadog_description/P50/meshes/hl_thigh.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="1.5708 0 0" xyz="0 -0.050 0"/>
+      <geometry>
+        <cylinder length="0.15" radius="0.053"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="hl_hipy"
+    type="revolute">
+    <origin
+      xyz="0 0.151 0"
+      rpy="0 0 0" />
+    <parent
+      link="hl_hip" />
+    <child
+      link="hl_thigh" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="-2.7822"
+      upper="0.3454"
+      effort="230"
+      velocity="17.453" />
+  </joint>
+  <link
+    name="hl_shank">
+    <inertial>
+      <origin
+        xyz="0.0023767 -1.1286E-06 -0.20867"
+        rpy="0 0 0" />
+      <mass
+        value="0.31429" />
+      <inertia
+        ixx="0.0035319"
+        ixy="5.3608E-09"
+        ixz="0.00020364"
+        iyy="0.0036205"
+        iyz="-6.2714E-07"
+        izz="0.00015099" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/mzw/worknote/quadog_ws/src/quadog_description/P50/meshes/hl_shank.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 -0.175"/>
+      <geometry>
+        <cylinder length="0.35" radius="0.03"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0 0 -0.35" rpy="1.5708 0 0" />
+      <geometry>
+        <cylinder length="0.04" radius="0.035"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="hl_knee"
+    type="revolute">
+    <origin
+      xyz="0 0 -0.35"
+      rpy="0 0 0" />
+    <parent
+      link="hl_thigh" />
+    <child
+      link="hl_shank" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="0.6016"
+      upper="2.8135"
+      effort="365"
+      velocity="18.069" />
+  </joint>
+  <link
+    name="hr_hip">
+    <inertial>
+      <origin
+        xyz="0.0030414 0.02616 -0.00010748"
+        rpy="0 0 0" />
+      <mass
+        value="1.4" />
+      <inertia
+        ixx="0.0020486"
+        ixy="4.5844E-05"
+        ixz="5.1483E-06"
+        iyy="0.0025034"
+        iyz="1.4272E-05"
+        izz="0.0023869" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/mzw/worknote/quadog_ws/src/quadog_description/P50/meshes/hr_hip.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+  </link>
+  <joint
+    name="hr_hipx"
+    type="revolute">
+    <origin
+      xyz="-0.3265 -0.095 0"
+      rpy="0 0 0" />
+    <parent
+      link="base" />
+    <child
+      link="hr_hip" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="-0.5585"
+      upper="0.2793"
+      effort="230"
+      velocity="17.453" />
+  </joint>
+  <link
+    name="hr_thigh">
+    <inertial>
+      <origin
+        xyz="-0.0051681 0.020085 -0.067991"
+        rpy="0 0 0" />
+        <mass
+        value="4.5" />
+      <inertia
+        ixx="0.032957"
+        ixy="2.401E-06"
+        ixz="0.0016039"
+        iyy="0.036837"
+        iyz="0.00051615"
+        izz="0.0056745" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/mzw/worknote/quadog_ws/src/quadog_description/P50/meshes/hr_thigh.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="1.5708 0 0" xyz="0 0.050 0"/>
+      <geometry>
+        <cylinder length="0.15" radius="0.053"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="hr_hipy"
+    type="revolute">
+    <origin
+      xyz="0 -0.151 0"
+      rpy="0 0 0" />
+    <parent
+      link="hr_hip" />
+    <child
+      link="hr_thigh" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="-2.7822"
+      upper="0.3454"
+      effort="230"
+      velocity="17.453" />
+  </joint>
+  <link
+    name="hr_shank">
+    <inertial>
+      <origin
+        xyz="0.0023767 -1.1603E-06 -0.20868"
+        rpy="0 0 0" />
+      <mass
+        value="0.31429" />
+      <inertia
+        ixx="0.0035319"
+        ixy="5.7118E-09"
+        ixz="0.00020364"
+        iyy="0.0036205"
+        iyz="-6.271E-07"
+        izz="0.00015099" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/mzw/worknote/quadog_ws/src/quadog_description/P50/meshes/hr_shank.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 -0.175"/>
+      <geometry>
+        <cylinder length="0.35" radius="0.03"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0 0 -0.35" rpy="1.5708 0 0" />
+      <geometry>
+        <cylinder length="0.04" radius="0.035"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="hr_knee"
+    type="revolute">
+    <origin
+      xyz="0 0 -0.35"
+      rpy="0 0 0" />
+    <parent
+      link="hr_thigh" />
+    <child
+      link="hr_shank" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="0.6016"
+      upper="2.8135"
+      effort="365"
+      velocity="18.069" />
+  </joint>
+</robot>

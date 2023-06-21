@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+
+<robot name="quadog" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  
+
+  <!-- Transmissions for ros_control -->
+  <xacro:macro name="transmission_block" params="joint_name">
+    <transmission name="trans1">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${joint_name}">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="motor1">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+  </xacro:macro>
+
+  <xacro:transmission_block joint_name="FLHipX"/>
+  <xacro:transmission_block joint_name="FLHipY"/>
+  <xacro:transmission_block joint_name="FLKnee"/>
+  <xacro:transmission_block joint_name="HLHipX"/>
+  <xacro:transmission_block joint_name="HLHipY"/>
+  <xacro:transmission_block joint_name="HLKnee"/>
+  <xacro:transmission_block joint_name="FRHipX"/>
+  <xacro:transmission_block joint_name="FRHipY"/>
+  <xacro:transmission_block joint_name="FRKnee"/>
+  <xacro:transmission_block joint_name="HRHipX"/>
+  <xacro:transmission_block joint_name="HRHipY"/>
+  <xacro:transmission_block joint_name="HRKnee"/>
+
+
+</robot>

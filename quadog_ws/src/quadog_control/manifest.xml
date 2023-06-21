@@ -1,0 +1,16 @@
+<package>
+  <description brief="pigot_control">
+
+     pigot_control
+
+  </description>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/pigot_control</url>
+  <depend package="rospy"/>
+  <depend package="roscpp"/>
+  <depend package="std_msgs"/>
+
+</package>
+
+
