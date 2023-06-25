@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8.0)
-project(deeprobotics_planning)
+project(nav)
 
 set(CMAKE_CXX_FLAGS "-std=c++11 -g -w -s")
 set(CMAKE_BUILD_TYPE Release)
@@ -16,7 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
     tf
     message_generation
     actionlib
-    #deep_msgs
+    dynamic_reconfigure
 )
 
 add_action_files(
@@ -32,6 +32,8 @@ generate_messages(
         geometry_msgs
 )
 
+generate_dynamic_reconfigure_options(cfg/navigation.cfg)
+
 catkin_package(
     INCLUDE_DIRS
     include
@@ -46,7 +48,7 @@ catkin_package(
     # ${EXTERNAL_LIBS}
     CATKIN_DEPENDS
         # move_base_msgs
-    # dynamic_reconfigure
+    dynamic_reconfigure
     # geometry_msgs
     # interactive_markers
     # message_runtime
@@ -83,8 +85,9 @@ include_directories(
 
 add_library(nav_interface STATIC  src/basic_function.cpp src/nav_interface.cpp src/nav_sl.cpp )
 
-# add_executable(nav_test src/test.cpp )
-# target_link_libraries(nav_test nav_interface ${catkin_LIBRARIES})
+add_executable(nav_test src/test.cpp )
+target_link_libraries(nav_test nav_interface ${catkin_LIBRARIES})
 
-add_executable(navigation src/nav_node.cpp)
-target_link_libraries(navigation nav_interface ${catkin_LIBRARIES})
+# add_executable(navigation src/nav_node.cpp)
+# target_link_libraries(navigation nav_interface ${catkin_LIBRARIES})
+# add_dependencies(navigation &{PROJECT_NAME}_gencfg)

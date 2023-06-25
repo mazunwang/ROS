@@ -29,6 +29,7 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <nav_msgs/Odometry.h>
+#include <nav/NavigationConfig.h>
 
 namespace nav{
     class NavigationBase
