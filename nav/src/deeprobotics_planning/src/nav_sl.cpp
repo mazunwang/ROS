@@ -12,11 +12,38 @@
 #include "nav_sl.h"
 
 using namespace nav;
+using namespace basicfunction;
 
 NavigationStraightLine::NavigationStraightLine(const std::string& name):NavigationBase(name){
     inital_pose_flag_ = false;
     target_pose_flag_ = false;
     motion_state_ = 0;
+
+    timer_fd_ = timerfd_create(CLOCK_MONOTONIC, 0);
+    if (timer_fd_ == -1) {
+        perror("timerfd_create");
+        exit(EXIT_FAILURE);
+    }
+
+    struct itimerspec timer_spec;
+    timer_spec.it_interval.tv_sec = 0;
+    timer_spec.it_interval.tv_nsec = 1e8;
+    timer_spec.it_value.tv_sec = 1;
+    timer_spec.it_value.tv_nsec = 0;
+
+    if (timerfd_settime(timer_fd_, 0, &timer_spec, NULL) == -1) {
+        perror("timerfd_settime");
+        close(timer_fd_);
+        exit(EXIT_FAILURE);
+    }
+
+    auto toml_data = toml::parse<toml::preserve_comments>("/home/mzw/worknote/ros/nav/src/deeprobotics_planning/config/config.toml");
+    double vel_x = toml::find<double>(toml_data, "max_vel_x");
+    para_cfg_->AddParameter<double>("max_vel_x", vel_x, "max", 0.2, 0.8);
+
+
+
+    // para_cfg_->DisplayAllParameters();
 }
 
 NavigationStraightLine::~NavigationStraightLine(){
@@ -37,56 +64,19 @@ void NavigationStraightLine::SetTargetPos(const Vec3& pos, const Vec3& rpy){
 }
 
 void NavigationStraightLine::Plan(){
-   struct itimerspec new_value;
-   int max_exp, fd;
-   struct timespec now;
-   uint64_t exp, tot_exp;
-   ssize_t s;
+    while (true) {
 
-//    if ((argc != 2) && (argc != 4)) {
-//        fprintf(stderr, "%s init-secs [interval-secs max-exp]\n",
-//                argv[0]);
-//        exit(EXIT_FAILURE);
-//    }
+        uint64_t expirations;
+        if (read(timer_fd_, &expirations, sizeof(expirations)) == -1) {
+            perror("read");
+            exit(EXIT_FAILURE);
+        }
 
-//    if (clock_gettime(CLOCK_REALTIME, &now) == -1)
-//        handle_error("clock_gettime");
+        // 在这里执行你想要循环执行的代码
+        std::cout << "Timer expired" << std::endl;
+        // sleep(10);
+    }
 
-//    /* Create a CLOCK_REALTIME absolute timer with initial
-//       expiration and interval as specified in command line */
-
-//    new_value.it_value.tv_sec = now.tv_sec + atoi(argv[1]);
-//    new_value.it_value.tv_nsec = now.tv_nsec;
-//    if (argc == 2) {
-//        new_value.it_interval.tv_sec = 0;
-//        max_exp = 1;
-//    } else {
-//        new_value.it_interval.tv_sec = atoi(argv[2]);
-//        max_exp = atoi(argv[3]);
-//    }
-//    new_value.it_interval.tv_nsec = 0;
-
-//    fd = timerfd_create(CLOCK_REALTIME, 0);
-//    if (fd == -1)
-//        handle_error("timerfd_create");
-
-//    if (timerfd_settime(fd, TFD_TIMER_ABSTIME, &new_value, NULL) == -1)
-//        handle_error("timerfd_settime");
-
-//    print_elapsed_time();
-//    printf("timer started\n");
-
-//    for (tot_exp = 0; tot_exp < max_exp;) {
-//        s = read(fd, &exp, sizeof(uint64_t));
-//        if (s != sizeof(uint64_t))
-//            handle_error("read");
-
-//        tot_exp += exp;
-//        print_elapsed_time();
-//        printf("read: %llu; total=%llu\n",
-//                (unsigned long long) exp,
-//                (unsigned long long) tot_exp);
-//    }
 }
 
 PlanState NavigationStraightLine::GetPlanState(){
@@ -97,11 +87,12 @@ bool NavigationStraightLine::StraightLinePlanProcessing(){
     double dx = goal_pos_x_ - cur_pos_x_;
     double dy = goal_pos_y_ - cur_pos_y_;
     double delta_theta_goal = goal_theta_ - cur_theta_;
-    if(delta_theta_goal > M_PI){//与目标的角度偏差
-        delta_theta_goal -= M_PI * 2.;
-    }else if(delta_theta_goal < -M_PI){
-        delta_theta_goal += M_PI* 2.;
-    }
+    // if(delta_theta_goal > M_PI){//与目标的角度偏差
+    //     delta_theta_goal -= M_PI * 2.;
+    // }else if(delta_theta_goal < -M_PI){
+    //     delta_theta_goal += M_PI* 2.;
+    // }
+    LimitAngle(delta_theta_goal);
 //   if(std::sqrt(dx*dx + dy*dy) > 0.5 || fabs(delta_theta_goal) > M_PI / 4.){
 //     is_enter_normal_mode = false;
 //   }
@@ -118,11 +109,12 @@ bool NavigationStraightLine::StraightLinePlanProcessing(){
         forward_scale = 1.0;
     }
     delta_theta_line = angle_line - cur_theta_;
-    if(delta_theta_line > M_PI){
-        delta_theta_line -= M_PI * 2.;
-    }else if(delta_theta_line < -M_PI){
-        delta_theta_line += M_PI* 2.;
-    }
+    // if(delta_theta_line > M_PI){
+    //     delta_theta_line -= M_PI * 2.;
+    // }else if(delta_theta_line < -M_PI){
+    //     delta_theta_line += M_PI* 2.;
+    // }
+    LimitAngle(delta_theta_line);
     switch (motion_state_){
         case 0:{//initial state
             SetVelocityZero();

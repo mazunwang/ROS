@@ -14,16 +14,21 @@
 using namespace interface;
 using namespace basicfunction;
 
+parameter::ParametersConfig* nav::NavigationBase::para_cfg_ = new parameter::ParametersConfig();
+
 NavgationInterface::NavgationInterface(/* args */){
 
     as_ = new NavigationActionServer(ros::NodeHandle(), "navigation", boost::bind(&NavgationInterface::NavigationStraightLineCb, this, _1), false);
     nav_ptr_ = std::make_shared<nav::NavigationStraightLine>("nav_sl");
+    
 
     ros::NodeHandle nh;
     ros::NodeHandle private_nh("~");
     odom_sub_ = nh.subscribe("/odom", 10, &NavgationInterface::OdometryCallback, this);
     as_->start();
-    // ROS_WARN_STREAM("debug!!!!");
+
+    nav::NavigationBase::para_cfg_->DisplayAllParameters();
+    nav_ptr_->Plan();
 }
 
 NavgationInterface::~NavgationInterface(){

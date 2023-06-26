@@ -6,7 +6,6 @@ set(CMAKE_BUILD_TYPE Release)
 set(THIRD_PARTY ./third_party)
 ## Find catkin macros and libraries
 find_package(catkin REQUIRED COMPONENTS
-
     roscpp
     rospy
     geometry_msgs
@@ -32,45 +31,14 @@ generate_messages(
         geometry_msgs
 )
 
-generate_dynamic_reconfigure_options(cfg/navigation.cfg)
+# generate_dynamic_reconfigure_options(cfg/navigation.cfg)
 
 catkin_package(
     INCLUDE_DIRS
     include
-    # ${THIRD_PARTY}/eigen3
-    # ${EIGEN3_INCLUDE_DIRS}
-    # ${PCL_INCLUDE_DIRS}
-    # ${OpenVDB_INCLUDE_DIR}
-    # ${TBB_INCLUDE_DIRS}
-    # ${EXTERNAL_INCLUDE_DIRS}
     LIBRARIES
-    # local_planner
-    # ${EXTERNAL_LIBS}
     CATKIN_DEPENDS
-        # move_base_msgs
     dynamic_reconfigure
-    # geometry_msgs
-    # interactive_markers
-    # message_runtime
-    # nav_msgs
-    # pluginlib
-    # roscpp
-    # std_msgs
-    # tf_conversions
-    # tf2_eigen
-    # tf2_geometry_msgs
-    # tf2_sensor_msgs
-    # tf2
-    # tf2_ros
-    # visualization_msgs
-    # DEPENDS
-    # SUITESPARSE
-    # G2O
-    # TBB
-    # OpenVDB
-    # PCL
-    # EIGEN3
-    # Boost
 )
 
 
@@ -79,15 +47,14 @@ include_directories(
     ${catkin_INCLUDE_DIRS}
     include
     ${THIRD_PARTY}/eigen3
+    ${THIRD_PARTY}/toml
 )
 
-
-
-add_library(nav_interface STATIC  src/basic_function.cpp src/nav_interface.cpp src/nav_sl.cpp )
+add_library(nav STATIC  src/basic_function.cpp src/nav_sl.cpp)
 
 add_executable(nav_test src/test.cpp )
-target_link_libraries(nav_test nav_interface ${catkin_LIBRARIES})
+target_link_libraries(nav_test nav ${catkin_LIBRARIES})
 
-# add_executable(navigation src/nav_node.cpp)
-# target_link_libraries(navigation nav_interface ${catkin_LIBRARIES})
+add_executable(navigation src/nav_node.cpp src/nav_interface.cpp)
+target_link_libraries(navigation nav ${catkin_LIBRARIES})
 # add_dependencies(navigation &{PROJECT_NAME}_gencfg)

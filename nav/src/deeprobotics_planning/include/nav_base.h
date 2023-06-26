@@ -13,23 +13,8 @@
 
 #include "common.h"
 #include "basic_function.h"
-#include <std_msgs/Float32.h>
-#include <std_msgs/Float64.h>
-#include <std_msgs/Int32.h>
-#include <std_msgs/Int64.h>
-#include <std_msgs/UInt32.h>
-#include <std_msgs/UInt8.h>
-#include <std_msgs/String.h>
-#include <std_msgs/Float32MultiArray.h>
-#include <std_msgs/UInt8MultiArray.h>
-#include <sensor_msgs/Imu.h>
-#include <sensor_msgs/JointState.h>
-#include <geometry_msgs/Quaternion.h>
-#include <geometry_msgs/TwistStamped.h>
-#include <geometry_msgs/PoseStamped.h>
-#include <geometry_msgs/PoseWithCovarianceStamped.h>
-#include <nav_msgs/Odometry.h>
-#include <nav/NavigationConfig.h>
+#include "parameters_config.hpp"
+
 
 namespace nav{
     class NavigationBase
@@ -42,7 +27,7 @@ namespace nav{
 
         std::string nav_name_;
         int nav_mode_;
-        // PlanState plan_state_;
+        static parameter::ParametersConfig* para_cfg_;
 
         virtual void SetCurrentPos(const Vec3& pos, const Vec3& rpy, const Vec3& vel, const Vec3& omg) = 0;
         virtual void SetTargetPos(const Vec3& pos, const Vec3& rpy) = 0;
