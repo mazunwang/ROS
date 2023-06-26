@@ -18,12 +18,16 @@ NavgationInterface::NavgationInterface(/* args */){
 
     as_ = new NavigationActionServer(ros::NodeHandle(), "navigation", boost::bind(&NavgationInterface::NavigationStraightLineCb, this, _1), false);
     nav_ptr_ = std::make_shared<nav::NavigationStraightLine>("nav_sl");
+    
 
     ros::NodeHandle nh;
     ros::NodeHandle private_nh("~");
     odom_sub_ = nh.subscribe("/odom", 10, &NavgationInterface::OdometryCallback, this);
     as_->start();
+    nav_ptr_->Plan();
     // ROS_WARN_STREAM("debug!!!!");
+
+    
 }
 
 NavgationInterface::~NavgationInterface(){

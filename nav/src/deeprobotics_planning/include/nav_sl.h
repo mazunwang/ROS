@@ -29,6 +29,8 @@ namespace nav{
         void SetVelocityZero();
         bool StraightLinePlanProcessing();
 
+        int timer_fd_;
+
 
     public:
         NavigationStraightLine(const std::string& name);

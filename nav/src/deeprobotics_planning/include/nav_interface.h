@@ -14,10 +14,27 @@
 
 
 #include "common.h"
-#include <actionlib/server/simple_action_server.h>
-#include "nav/NavigationAction.h"
 #include "nav_base.h"
 #include "nav_sl.h"
+
+#include <std_msgs/Float32.h>
+#include <std_msgs/Float64.h>
+#include <std_msgs/Int32.h>
+#include <std_msgs/Int64.h>
+#include <std_msgs/UInt32.h>
+#include <std_msgs/UInt8.h>
+#include <std_msgs/String.h>
+#include <std_msgs/Float32MultiArray.h>
+#include <std_msgs/UInt8MultiArray.h>
+#include <sensor_msgs/Imu.h>
+#include <sensor_msgs/JointState.h>
+#include <geometry_msgs/Quaternion.h>
+#include <geometry_msgs/TwistStamped.h>
+#include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/PoseWithCovarianceStamped.h>
+#include <nav_msgs/Odometry.h>
+#include <actionlib/server/simple_action_server.h>
+#include "nav/NavigationAction.h"
 
 namespace interface{
     typedef actionlib::SimpleActionServer<nav::NavigationAction> NavigationActionServer;
