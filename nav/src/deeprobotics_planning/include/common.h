@@ -26,7 +26,9 @@
 #include <unistd.h>
 #include <assert.h>
 #include "toml.hpp"
+#include <vector>
 
+typedef float num_type;
 
 enum PlanState{
     kIdle = 0,
@@ -36,8 +38,13 @@ enum PlanState{
     kReachGoal,
 };
 
-typedef Eigen::Vector3d Vec3;
-typedef Eigen::Vector4d Vec4;
-typedef Eigen::Matrix3d Mat3;
+typedef Eigen::Matrix<num_type, 3, 1> Vec3;
+typedef Eigen::Matrix<num_type, 4, 1> Vec4;
+typedef Eigen::Matrix<num_type, 3, 3> Mat3;
+
+
+struct Point2D{
+    num_type x, y;
+};
 
 #endif

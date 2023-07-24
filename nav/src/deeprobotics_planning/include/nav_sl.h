@@ -21,9 +21,9 @@ namespace nav{
         PlanState plan_state_;
         bool inital_pose_flag_;
         bool target_pose_flag_;
-        double cur_pos_x_, cur_pos_y_, cur_theta_;
-        double goal_pos_x_, goal_pos_y_, goal_theta_;
-        double cmd_vel_x_, cmd_vel_y_, cmd_omg_z_;
+        num_type cur_pos_x_, cur_pos_y_, cur_theta_;
+        num_type goal_pos_x_, goal_pos_y_, goal_theta_;
+        num_type cmd_vel_x_, cmd_vel_y_, cmd_omg_z_;
         int motion_state_;
 
         void SetVelocityZero();

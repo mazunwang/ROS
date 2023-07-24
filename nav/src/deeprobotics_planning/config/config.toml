@@ -1,1 +1,11 @@
-max_vel_x = 0.5
+plan_frequency = 50
+
+forward_vel_x = 0.5
+
+max_forward_vel_x = 1.0
+max_backward_vel_x = -0.5
+
+max_side_vel = 0.15
+max_turnning_vel = 0.6
+
+is_enabled = false

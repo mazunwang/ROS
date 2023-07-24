@@ -12,7 +12,7 @@
 #include "nav_interface.h"
 
 using namespace interface;
-using namespace basicfunction;
+using namespace math;
 
 parameter::ParametersConfig* nav::NavigationBase::para_cfg_ = new parameter::ParametersConfig();
 

@@ -11,17 +11,21 @@
 
 #include "basic_function.h"
 
-namespace basicfunction{
+namespace math{
 
+num_type Sign(num_type x) {
+    if(fabs(x) < 1e-4) return 0.;
+    return x < 0.0 ? -1.0 : 1.0; 
+}
 
-void LimitAngle(double& angle){
+void LimitAngle(num_type& angle){
     angle = fmod(angle, 2 * M_PI);
     if (angle > M_PI) angle -= 2 * M_PI;
 }
 
 Vec3 QuatToRpy(const Vec4& q){
     Vec3 rpy;
-    double as = std::min(-2. * (q[1] * q[3] - q[0] * q[2]), .99999);
+    num_type as = std::min(-2. * (q[1] * q[3] - q[0] * q[2]), .99999);
     rpy(2) = std::atan2(2 * (q[1] * q[2] + q[0] * q[3]),
                 q[0] * q[0] + q[1] * q[1] - q[2] * q[2] - q[3] * q[3]);
     rpy(1) = std::asin(as);
@@ -31,10 +35,10 @@ Vec3 QuatToRpy(const Vec4& q){
 }
 
 Mat3 RpyToRotMat(const Vec3& rpy){
-    Eigen::AngleAxis<double> yawAngle(rpy[2], Vec3 ::UnitZ());
-    Eigen::AngleAxis<double> pitchAngle(rpy[1], Vec3::UnitY());
-    Eigen::AngleAxis<double> rollAngle(rpy[0], Vec3::UnitX());
-    Eigen::Quaternion<double> q = yawAngle * pitchAngle * rollAngle;
+    Eigen::AngleAxis<num_type> yawAngle(rpy[2], Vec3 ::UnitZ());
+    Eigen::AngleAxis<num_type> pitchAngle(rpy[1], Vec3::UnitY());
+    Eigen::AngleAxis<num_type> rollAngle(rpy[0], Vec3::UnitX());
+    Eigen::Quaternion<num_type> q = yawAngle * pitchAngle * rollAngle;
     return q.matrix();
 }
 
@@ -49,8 +53,8 @@ Vec4 RpyToQuat(const Vec3& rpy){
 }
 
 Mat3 QuatToRotMat(const Vec4& q){
-    double w = q(0);
-    double x = q(1), y = q(2), z = q(3);
+    num_type w = q(0);
+    num_type x = q(1), y = q(2), z = q(3);
     Mat3 R;
     R << 1-2*y*y-2*z*z, 2*x*y+2*w*z, 2*x*z-2*w*y,
         2*x*y-2*w*z, 1-2*x*x-2*z*z, 2*y*z+2*w*x,
@@ -61,27 +65,27 @@ Mat3 QuatToRotMat(const Vec4& q){
 
 Vec4 RotMatToQuat(const Mat3& rm){
     Vec4 q;
-    double tr = rm.trace();
+    num_type tr = rm.trace();
     if (tr > 0.0) {
-        double S = sqrt(tr + 1.0) * 2.0;
+        num_type S = sqrt(tr + 1.0) * 2.0;
         q(0) = 0.25 * S;
         q(1) = (rm(2, 1) - rm(1, 2)) / S;
         q(2) = (rm(0, 2) - rm(2, 0)) / S;
         q(3) = (rm(1, 0) - rm(0, 1)) / S;
     } else if ((rm(0, 0) > rm(1, 1)) && (rm(0, 0) > rm(2, 2))) {
-        double S = sqrt(1.0 + rm(0, 0) - rm(1, 1) - rm(2, 2)) * 2.0;
+        num_type S = sqrt(1.0 + rm(0, 0) - rm(1, 1) - rm(2, 2)) * 2.0;
         q(0) = (rm(2, 1) - rm(1, 2)) / S;
         q(1) = 0.25 * S;
         q(2) = (rm(0, 1) + rm(1, 0)) / S;
         q(3) = (rm(0, 2) + rm(2, 0)) / S;
     } else if (rm(1, 1) > rm(2, 2)) {
-        double S = sqrt(1.0 + rm(1, 1) - rm(0, 0) - rm(2, 2)) * 2.0;
+        num_type S = sqrt(1.0 + rm(1, 1) - rm(0, 0) - rm(2, 2)) * 2.0;
         q(0) = (rm(0, 2) - rm(2, 0)) / S;
         q(1) = (rm(0, 1) + rm(1, 0)) / S;
         q(2) = 0.25 * S;
         q(3) = (rm(1, 2) + rm(2, 1)) / S;
     } else {
-        double S = sqrt(1.0 + rm(2, 2) - rm(0, 0) - rm(1, 1)) * 2.0;
+        num_type S = sqrt(1.0 + rm(2, 2) - rm(0, 0) - rm(1, 1)) * 2.0;
         q(0) = (rm(1, 0) - rm(0, 1)) / S;
         q(1) = (rm(0, 2) + rm(2, 0)) / S;
         q(2) = (rm(1, 2) + rm(2, 1)) / S;
@@ -91,5 +95,24 @@ Vec4 RotMatToQuat(const Mat3& rm){
 }
 
 
+bool Intersects(std::vector<Point2D>& polygon, num_type testx, num_type testy){
+    bool c = false;
+    int i, j, nvert = polygon.size();
+    for (i = 0, j = nvert - 1; i < nvert; j = i++) {
+        num_type yi = polygon[i].y, yj = polygon[j].y, xi = polygon[i].x, xj = polygon[j].x;
+        if (((yi > testy) != (yj > testy)) && (testx < (xj - xi) * (testy - yi) / (yj - yi) + xi)) c = !c;
+    }
+    return c;
+}
+
+bool intersects_helper(std::vector<Point2D>& polygon1, std::vector<Point2D>& polygon2) {
+    for (unsigned int i = 0; i < polygon1.size(); i++)
+        if (Intersects(polygon2, polygon1[i].x, polygon1[i].y)) return true;
+    return false;
+}
+
+bool Intersects(std::vector<Point2D>& polygon1, std::vector<Point2D>& polygon2) {
+    return intersects_helper(polygon1, polygon2) || intersects_helper(polygon2, polygon1);
+}
 
 };

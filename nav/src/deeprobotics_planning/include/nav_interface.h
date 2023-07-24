@@ -16,6 +16,7 @@
 #include "common.h"
 #include "nav_base.h"
 #include "nav_sl.h"
+#include "nav_mpc.h"
 
 #include <std_msgs/Float32.h>
 #include <std_msgs/Float64.h>

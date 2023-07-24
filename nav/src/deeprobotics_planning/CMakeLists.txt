@@ -50,7 +50,7 @@ include_directories(
     ${THIRD_PARTY}/toml
 )
 
-add_library(nav STATIC  src/basic_function.cpp src/nav_sl.cpp)
+add_library(nav STATIC  src/basic_function.cpp src/nav_sl.cpp src/nav_mpc.cpp)
 
 add_executable(nav_test src/test.cpp )
 target_link_libraries(nav_test nav ${catkin_LIBRARIES})

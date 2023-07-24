@@ -12,7 +12,7 @@
 #include "nav_sl.h"
 
 using namespace nav;
-using namespace basicfunction;
+using namespace math;
 
 NavigationStraightLine::NavigationStraightLine(const std::string& name):NavigationBase(name){
     inital_pose_flag_ = false;
@@ -38,8 +38,8 @@ NavigationStraightLine::NavigationStraightLine(const std::string& name):Navigati
     }
 
     auto toml_data = toml::parse<toml::preserve_comments>("/home/mzw/worknote/ros/nav/src/deeprobotics_planning/config/config.toml");
-    double vel_x = toml::find<double>(toml_data, "max_vel_x");
-    para_cfg_->AddParameter<double>("max_vel_x", vel_x, "max", 0.2, 0.8);
+    double vel_x = toml::find<double>(toml_data, "max_forward_vel_x");
+    para_cfg_->AddParameter<double>("max_vel_x", 0.8, "max", 0.2, vel_x);
 
 
 
@@ -50,6 +50,7 @@ NavigationStraightLine::~NavigationStraightLine(){
 }
 
 void NavigationStraightLine::SetCurrentPos(const Vec3& pos, const Vec3& rpy, const Vec3& vel, const Vec3& omg){
+    std::lock_guard<std::mutex> lock(mtx_);
     inital_pose_flag_ = true;
     cur_pos_x_ = pos[0];
     cur_pos_y_ = pos[1];
@@ -57,6 +58,7 @@ void NavigationStraightLine::SetCurrentPos(const Vec3& pos, const Vec3& rpy, con
 }
 
 void NavigationStraightLine::SetTargetPos(const Vec3& pos, const Vec3& rpy){
+    std::lock_guard<std::mutex> lock(mtx_);
     target_pose_flag_ = true;
     goal_pos_x_ = pos[0];
     goal_pos_y_ = pos[1];
@@ -66,6 +68,7 @@ void NavigationStraightLine::SetTargetPos(const Vec3& pos, const Vec3& rpy){
 void NavigationStraightLine::Plan(){
     while (true) {
 
+
         uint64_t expirations;
         if (read(timer_fd_, &expirations, sizeof(expirations)) == -1) {
             perror("read");
@@ -73,9 +76,11 @@ void NavigationStraightLine::Plan(){
         }
 
         // 在这里执行你想要循环执行的代码
+        StraightLinePlanProcessing();
         std::cout << "Timer expired" << std::endl;
         // sleep(10);
     }
+
 
 }
 
@@ -84,9 +89,10 @@ PlanState NavigationStraightLine::GetPlanState(){
 }
 
 bool NavigationStraightLine::StraightLinePlanProcessing(){
-    double dx = goal_pos_x_ - cur_pos_x_;
-    double dy = goal_pos_y_ - cur_pos_y_;
-    double delta_theta_goal = goal_theta_ - cur_theta_;
+    std::lock_guard<std::mutex> lock(mtx_);
+    num_type dx = goal_pos_x_ - cur_pos_x_;
+    num_type dy = goal_pos_y_ - cur_pos_y_;
+    num_type delta_theta_goal = goal_theta_ - cur_theta_;
     // if(delta_theta_goal > M_PI){//与目标的角度偏差
     //     delta_theta_goal -= M_PI * 2.;
     // }else if(delta_theta_goal < -M_PI){
@@ -97,10 +103,10 @@ bool NavigationStraightLine::StraightLinePlanProcessing(){
 //     is_enter_normal_mode = false;
 //   }
 //   if(is_enter_normal_mode==false){
-    double angle_line = 0.0;//直线在全局地图的角度
-    double delta_theta_line = 0.0;//与直线的角度偏差
-    double distance_to_goal = std::sqrt(dx*dx + dy*dy);
-    double forward_scale = 1.0;
+    num_type angle_line = 0.0;//直线在全局地图的角度
+    num_type delta_theta_line = 0.0;//与直线的角度偏差
+    num_type distance_to_goal = std::sqrt(dx*dx + dy*dy);
+    num_type forward_scale = 1.0;
     if(nav_mode_==1){
         angle_line = atan2(-dy, -dx);
         forward_scale = -1.0;
@@ -131,9 +137,7 @@ bool NavigationStraightLine::StraightLinePlanProcessing(){
                 break;
             }
             cmd_omg_z_ = 1.0*(delta_theta_line);
-            double sign_num = 1.;
-            if(delta_theta_line < 0) sign_num = -1.;
-            if(fabs(cmd_omg_z_) < 0.1) cmd_omg_z_ = sign_num * 0.1; 
+            if(fabs(cmd_omg_z_) < 0.1) cmd_omg_z_ = Sign(delta_theta_line) * 0.1; 
             if(fabs(delta_theta_line) < 0.08){
                 motion_state_ = 2;
                 cmd_omg_z_ = 0.;
@@ -144,9 +148,9 @@ bool NavigationStraightLine::StraightLinePlanProcessing(){
         case 2:{//直线靠近
             cmd_vel_y_ = 0.;
             cmd_omg_z_ = 0.;
-            double theta = cur_theta_;
-            double delta_x = std::cos(theta) * dx + std::sin(theta) * dy;
-            double delta_y = std::sin(theta) * dx - std::cos(theta) * dy;
+            num_type theta = cur_theta_;
+            num_type delta_x = std::cos(theta) * dx + std::sin(theta) * dy;
+            num_type delta_y = std::sin(theta) * dx - std::cos(theta) * dy;
             if(fabs(delta_theta_line) > 0.2 && distance_to_goal > 0.4) {
                 cmd_vel_x_ = 0.0;
                 motion_state_ = 1;

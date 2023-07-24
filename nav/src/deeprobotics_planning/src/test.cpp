@@ -13,17 +13,17 @@
 #include "nav_sl.h"
 // #include "parameters/parameters_config.hpp"
 
-using namespace basicfunction;
+using namespace math;
 
 int main(){
     // std::shared_ptr<nav::NavigationBase> nav_ptr = std::make_shared<nav::NavigationStraightLine>("Nav");
     // Vec4 quat(0.99998594901, -0.00521880544114, -0.000917173203543, 0.00015698994999);
     // std::cout << QuatToRpy(quat) << std::endl;
 
-    parameter::ParametersConfig config;
+    // parameter::ParametersConfig config;
 
-    config.AddParameter<double>("max_vel_x", 0.5, "max forward velocity", 0.2, 2.5);
-    std::cout << "value:  " << config.GetParameter<double>("max_vel_x") << std::endl;
+    // config.AddParameter<double>("max_vel_x", 0.5, "max forward velocity", 0.2, 2.5);
+    // std::cout << "value:  " << config.GetParameter<double>("max_vel_x") << std::endl;
 
     // 设置参数
     // config.setParameter("max_speed", "100.5");
@@ -41,5 +41,12 @@ int main(){
     // std::cout << "Min Distance: " << minDistance << std::endl;
     // std::cout << "Is Enabled: " << std::boolalpha << isEnabled << std::endl;
 
+    std::vector<Point2D> poly;
+    poly.push_back(Point2D({0.1, 0.1}));
+    poly.push_back(Point2D({0.1, -0.1}));
+    poly.push_back(Point2D({-0.1, -0.1}));
+    poly.push_back(Point2D({-0.1, 0.1}));
+
+    std::cout << math::Intersects(poly, 0, 0.2) << std::endl;
     return 0;
 }
